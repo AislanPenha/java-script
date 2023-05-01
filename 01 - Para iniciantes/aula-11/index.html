@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 11</title>
+</head>
+<body>
+<h1>Const com valores mutáveis</h1>
+<strong><code>const</code></strong> descreve uma <strong>variável</strong> que não pode ser <strong>reatribuída</strong><br/> 
+(com o operador de atribuição <strong>=</strong>). Depois de criá-la, <br/>
+não podemos fazer algo assim:<br/><br/>
+
+<code>const nome = 'luiz';<br/>
+nome = 'joão'; // Erro: Assignment to constant variable.<br/></code>
+Porém, existe uma diferença entre variável e valor.<br/><br/>
+
+Variáveis são como <strong>um apelido para um valor</strong>, uma espécie de <br/>
+alias para mencionar algum valor salvo na memória.<br/><br/>
+
+Já valores são os dados que realmente ficam salvos na memória <br/>
+e sustentam determinado tipo. Alguns tipos de valores <strong>são <br/>
+imutáveis</strong>, como <strong><code>number, string, boolean, undefined, null, <br/>
+symbol e bigint</code> (os primitivos todos são imutáveis)</strong>. Outros <br/>
+tipos são mutáveis, como <strong><code>arrays</code></strong> e <strong><code>objetos</code></strong> (objetos em geral <br/>
+são mutáveis, com exceção de <strong><code>null</code></strong>).<br/><br/>
+
+Valores mutáveis geralmente são estruturas de dados mais<br/>
+complexas que sustentam outros valores ou comportamentos <br/>
+internamente. Como é o caso do array, que pode ser composto <br/>
+por vários outros tipos de dados.<br/><br/>
+
+Quando usamos <strong><code>const</code></strong> com tipos primitivos, esse valor nunca <br/>
+mais poderá ser alterado. Nesse caso, além de <strong><code>const</code></strong> não <br/>
+permitir reatribuição, o valor também é imutável <br/>
+(consequentemente, nunca podemos alterar essa constante).<br/><br/>
+
+Já quando usamos <strong><code>const</code></strong> com valores mutáveis (como arrays e <br/>
+objetos), a variável continua sendo constante, porém os valores <br/>
+dentro do objeto poderão ser alterados. Isso acontece porque <br/>
+quando alteramos um valor interno de um objeto, não ocorre a <br/>
+reatribuição da variável com sinal de atribuição <strong>=</strong> (a variável <br/>
+continua apontando para o mesmo local na memória), apenas a <br/>
+alteração de um valor interno do mesmo objeto.<br/><br/>
+
+Por este motivo, pode-se usar const com objetos mutáveis e <br/>
+ainda assim alterar seus valores internos. A única coisa que não <br/>
+vamos conseguir fazer é reatribuir o valor da variável.<br/><br/>
+
+Exemplos:
+
+<strong>Isso pode</strong><br/><br/>
+<code>
+const array = [1, 2, 3, 4, 5];<br/>
+array.pop();<br/>
+array[0] = 1024;<br/>
+console.log(array); // [ 1024, 2, 3, 4 ]</code><br/><br/>
+ 
+<strong>Isso NÃO pode</strong><br/><br/>
+
+<code>const array = [1, 2, 3, 4, 5];<br/>
+array = 'Legal'; // Assignment to constant variable.</code><br/><br/>
+
+</body>
+</html>
