@@ -29,7 +29,7 @@ console.log(pessoa2);
 
 // Padrões de Objetos
 // Factory functions / Constructor functions / Class(syntac sugar) 
-/*Em programação, é quando há o intuito de facilitar o entendimento, ou seja, sendo mais “doce” ou melhor diluído.*/
+/* Em programação, é quando há o intuito de facilitar o entendimento, ou seja, sendo mais “doce” ou melhor diluído.*/
 
 //Factory function
 function criaPessoa(nome, sobrenome){

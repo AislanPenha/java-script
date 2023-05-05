@@ -1,15 +1,51 @@
-function Pessoa(nome, sobrenome){
+function Produto(nome, preco) {
     this.nome = nome;
-    this.sobrenome = sobrenome;
-
-    this.nomeCompleto = () => this.nome + ' ' + this.sobrenome;
+    this.preco = preco;
 }
-Pessoa.prototype.parametro = 'Olha aí';
+Produto.prototype.aumento = function (quantia) {
+    this.preco += quantia;
+}
+Produto.prototype.desconto = function (quantia) {
+    this.preco -= quantia;
+}
+const p1 = new Produto('roupa', 90);
+p1.aumento(10);
+console.log(p1);
 
-Pessoa.prototype.nomeFull = function(){        // Se tiver o mesmo nome de algum método construtor o do construtor terá prioridade
-    return this.nome + ' ' + this.sobrenome;
+function Camiseta(nome, preco, cor) {
+    Produto.call(this, nome, preco, cor);
+    // this.cor = cor;
+}
+// Object.setPrototypeOf(Camiseta.prototype, Produto.prototype);  // Aqui não seta Produto como construtor
+Camiseta.prototype = Object.create(Produto.prototype); // Seta o construtor o Produto
+Camiseta.prototype.constructor = Camiseta; // Seta o construtor a Camiseta
+Camiseta.prototype.aumento = function(percentual){   // Sobreescreve se já existe o método no pai
+    this.preco += (this.preco * percentual /100);
+}
+Camiseta.prototype.desconto = function(percentual){  // Sobreescreve se já existe o método no pai
+    this.preco -= (this.preco * percentual /100);
 }
 
-// Instanciação
-const p1 = new Pessoa('Aislan', 'Penha');
-console.dir(p1);
+function Caneca (nome, preco, material, estoque){
+    Produto.call(this, nome, preco);
+    this.material = material;
+    Object.defineProperty(this, 'estoque', {
+        configurable:false,
+        get: function(){
+            return estoque;
+        },
+        set: function(valor){
+            if(typeof valor !== 'number') return;
+            estoque = valor;
+        }
+    });
+}
+const camiseta = new Camiseta('regata', 40, 'preta');
+camiseta.aumento(50);
+console.log(camiseta);
+
+const caneca = new Caneca('caneca', 10, 'plástico', 3);
+caneca.estoque = '33';
+console.log(caneca, caneca.estoque);
+
+

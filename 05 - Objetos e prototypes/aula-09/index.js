@@ -1,47 +1,39 @@
-
-function ValidaCPF (cpfEnviado) {
-    if (typeof cpfEnviado === 'undefined') return false;
-
-    Object.defineProperty(this, 'cpfLimpo', {
-        
-        get: function(){
-            return cpfEnviado.replace(/\D/g, '');
-        }
-    });
-
-    
+function criarPessoa(nome, sobrenome){
+    const falar = {
+        falar(){
+            console.log(`${this.nome} está falando.`);
+        },
+    };
+    const comer = {
+        comer(){
+            console.log(`${this.nome} está comendo.`);
+        },
+    };
+    const beber = {
+        beber(){
+            console.log(`${this.nome} está bebendo.`);
+        },
+    };
+    /*const pessoaPrototype = {
+        falar(){
+            console.log(`${this.nome} está falando.`);
+        },
+        comer(){
+            console.log(`${this.nome} está comendo.`);
+        },
+        beber(){
+            console.log(`${this.nome} está bebendo.`);
+        },
+    };*/
+   // const pessoaPrototype = Object.assign(falar, comer, beber); 
+    const pessoaPrototype = {...falar, ...comer, ...beber};
+    return Object.create(pessoaPrototype, {
+        nome: {enumerable: true, value: nome},
+        sobrenome: {enumerable: true, value: sobrenome}
+    })
 }
-
-ValidaCPF.prototype.valida = function (){
-    if (typeof this.cpfLimpo === 'undefined') return false;
-    if (this.cpfLimpo.length !== 11) return false;
-    if (this.eSequencia()) return false;
-    const cpfParcial = this.cpfLimpo.slice(0,-2);
-    const digitoUm = this.getDigito(cpfParcial);
-    const digitoDois = this.getDigito(cpfParcial + digitoUm);
-    
-    const cpf = cpfParcial + digitoUm + digitoDois;
-    return cpf === this.cpfLimpo;
-}
-ValidaCPF.prototype.getDigito = function (cpfParcial){
-    cpfParcial = Array.from(cpfParcial);
-    let count = cpfParcial.length + 1;
-
-    let digito = cpfParcial.reduce( (ac, val) => {
-            ac += (Number(val) * count);
-            count--;
-            return ac;
-        },0);
-    digito = 11 - (digito % 11);
-    return (digito > 9 ? '0': digito.toString());
-}
-ValidaCPF.prototype.eSequencia = function (){
-    const sequencia = this.cpfLimpo[0].repeat(this.cpfLimpo.length);
-    console.log(sequencia);
-    return sequencia === this.cpfLimpo;
-}
-const cpf = new ValidaCPF('00000000000');
-console.log(cpf.valida());
-//10 9  8  7  6 5  4  3 2
-// 0 1  2  7  4 0  3  5 3 
-// 0 9 16 49 24 0 12 15 6
+const p1 = criarPessoa('Aislan', 'Penha');
+console.log(p1);
+p1.comer();
+p1.falar();
+p1.beber();

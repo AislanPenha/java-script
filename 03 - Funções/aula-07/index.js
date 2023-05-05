@@ -1,10 +1,10 @@
 // Factory Functions (Funções fábrica) => Funções que retornam objeto
 
 function criaPessoa(nome, sobrenome, a, p){
-    //Variável privada abaixo
-    let id;
+    
+    let id; // Variável privada 
     return {
-        //Variáveis públicas abaixo
+        // Variáveis públicas abaixo
         nome,
 
         sobrenome,

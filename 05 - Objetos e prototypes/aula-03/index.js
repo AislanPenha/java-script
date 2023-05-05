@@ -14,6 +14,7 @@ console.log(copiaRustica);
 Object.defineProperty(produtos, 'nome', {
     writable: false,
 });
+console.log('##########');
 console.log(Object.getOwnPropertyDescriptor(produtos, 'nome'));
 console.log(Object.values(copiaSprad));
 console.log(Object.entries(copiaSprad));

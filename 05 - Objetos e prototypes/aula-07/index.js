@@ -1,66 +1,47 @@
-// new Object => Toda funcão construtora tem Object.protype
-// objA.__proto__ === Object.protype (true)
-const objA = {
-    chaveA: 'A'
-    // __proto__: Object.protype
-}
-const objB = {
-    chaveB: 'B',
-    // __proto__ : objA
-}
-const objC = {
-    chaveC: 'C',
-    // __proto__ : objB
-}
-// Maneira correta de pegar o __proto__
-// Object.getPrototypeOF(objeto)
-Object.setPrototypeOf(objB, objA);
-Object.setPrototypeOf(objC, objB);
 
-console.log(objC.chaveB);
+function ValidaCPF (cpfEnviado) {
+    if (typeof cpfEnviado === 'undefined') return false;
 
-function Produtos(nome, preco){
-    this.nome = nome;
-    this.preco = preco;
-}
-Produtos.prototype.aumento = function(valor){
-    this.preco = this.preco + (this.preco * valor / 100);
-}
-Produtos.prototype.desconto = function(valor){
-    this.preco = this.preco - (this.preco * valor / 100);
-}
-const p10 = new Produtos('Camisa', 100);
-p10.aumento(10);
-console.log(p10);
-p10.desconto(100);
-console.log(p10);
+    Object.defineProperty(this, 'cpfLimpo', {
+        
+        get: function(){
+            return cpfEnviado.replace(/\D/g, '');
+        }
+    });
 
-const p20 = {
-   nome: 'Lanterna',
-   preco:100
-};
-Object.setPrototypeOf(p20, Produtos.prototype);    //Só copia os prototypes, já que os Produtos é uma função construtora
-p20.aumento(10);
-console.log(p20);
+    
+}
 
-const p30 = Object.create(Produtos.prototype,{
-    nome: {
-        writable: true,
-        value: 'Computador',
-        configurable: true,
-        enumerable: true
-    },
-    preco: {
-        writable: true,
-        value: 1000,
-        configurable: true,
-        enumerable: true
-    },
-    cor: {
-        writable: true,
-        value: 'Azul',
-        configurable: true,
-        enumerable: true
-    },
-}); //Property Descriptor Map opcional
-console.log(p30);
+ValidaCPF.prototype.valida = function (){
+    if (typeof this.cpfLimpo === 'undefined') return false;
+    if (this.cpfLimpo.length !== 11) return false;
+    if (this.eSequencia()) return false;
+    const cpfParcial = this.cpfLimpo.slice(0,-2);
+    const digitoUm = this.getDigito(cpfParcial);
+    const digitoDois = this.getDigito(cpfParcial + digitoUm);
+    
+    const cpf = cpfParcial + digitoUm + digitoDois;
+    return cpf === this.cpfLimpo;
+}
+ValidaCPF.prototype.getDigito = function (cpfParcial){
+    cpfParcial = Array.from(cpfParcial);
+    let count = cpfParcial.length + 1;
+
+    let digito = cpfParcial.reduce( (ac, val) => {
+            ac += (Number(val) * count);
+            count--;
+            return ac;
+        },0);
+    digito = 11 - (digito % 11);
+    return (digito > 9 ? '0': digito.toString());
+}
+ValidaCPF.prototype.eSequencia = function (){
+    const sequencia = this.cpfLimpo[0].repeat(this.cpfLimpo.length);
+    console.log(sequencia);
+    return sequencia === this.cpfLimpo;
+}
+const cpf = new ValidaCPF('00000000000');
+console.log(cpf.valida());
+//10 9  8  7  6 5  4  3 2
+// 0 1  2  7  4 0  3  5 3 
+// 0 9 16 49 24 0 12 15 6

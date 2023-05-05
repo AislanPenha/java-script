@@ -1,51 +1,43 @@
-function Produto(nome, preco) {
-    this.nome = nome;
-    this.preco = preco;
+function Conta (agencia, conta, saldo){
+    this.agencia = agencia;
+    this.conta = conta;
+    this.saldo = saldo;
 }
-Produto.prototype.aumento = function (quantia) {
-    this.preco += quantia;
+Conta.prototype.sacar = function(valor){
+    if(this.saldo < valor) {
+        console.log(`Saldo insuficiente: R$ ${this.saldo.toFixed(2)}`)
+        return false;
+    }
+    this.saldo -= valor;
+    this.verSaldo();
 }
-Produto.prototype.desconto = function (quantia) {
-    this.preco -= quantia;
+Conta.prototype.depositar = function(valor){
+    this.saldo += valor;
+    this.verSaldo();
 }
-const p1 = new Produto('roupa', 90);
-p1.aumento(10);
-console.log(p1);
-
-function Camiseta(nome, preco, cor) {
-    Produto.call(this, nome, preco, cor);
-    // this.cor = cor;
-}
-// Object.setPrototypeOf(Camiseta.prototype, Produto.prototype);  // Aqui não seta Produto como construtor
-Camiseta.prototype = Object.create(Produto.prototype); // Seta o construtor o Produto
-Camiseta.prototype.constructor = Camiseta; // Seta o construtor a Camiseta
-Camiseta.prototype.aumento = function(percentual){   // Sobreescreve se já existe o método no pai
-    this.preco += (this.preco * percentual /100);
-}
-Camiseta.prototype.desconto = function(percentual){  // Sobreescreve se já existe o método no pai
-    this.preco -= (this.preco * percentual /100);
+Conta.prototype.verSaldo = function(){
+    console.log(`Ag/c: ${this.agencia}/${this.conta} | ` +
+                `Saldo: R$ ${this.saldo.toFixed(2)}`);
 }
 
-function Caneca (nome, preco, material, estoque){
-    Produto.call(this, nome, preco);
-    this.material = material;
-    Object.defineProperty(this, 'estoque', {
-        configurable:false,
-        get: function(){
-            return estoque;
-        },
-        set: function(valor){
-            if(typeof valor !== 'number') return;
-            estoque = valor;
-        }
-    });
+function CC(agencia, conta, saldo, limite){
+    Conta.call(this, agencia, conta, saldo);
+    Object.defineProperty(this, 'limite', {
+        enumerable: true,
+        value: limite
+    })
 }
-const camiseta = new Camiseta('regata', 40, 'preta');
-camiseta.aumento(50);
-console.log(camiseta);
-
-const caneca = new Caneca('caneca', 10, 'plástico', 3);
-caneca.estoque = '33';
-console.log(caneca, caneca.estoque);
-
-
+CC.prototype = Object.create(Conta.prototype);
+CC.prototype.constructor = CC;
+CC.prototype.sacar = function(valor){                         //Polimorfismo: mesmo método, funções diferentes
+    if(this.saldo + this.limite< valor ) {
+        console.log(`Saldo insuficiente: R$ ${this.saldo.toFixed(2)}`)
+        return false;
+    }
+    this.saldo -= valor;
+    this.verSaldo();
+}
+const conta = new CC(11, 22, 10, 50);
+conta.sacar(19);
+// conta.depositar(9);
+console.log(conta);
