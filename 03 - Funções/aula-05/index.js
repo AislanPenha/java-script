@@ -1,4 +1,3 @@
-
 function rand(min = 1000, max = 3000){
     let num = Math.random() * (max - min) + min;
     num = Math.round(num);
@@ -42,4 +41,3 @@ function f2Callback(){
 function f3Callback(){
     console.log('Hello World');
 }
-
